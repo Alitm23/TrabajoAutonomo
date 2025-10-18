@@ -35,8 +35,69 @@ while dificultad_valida == False:
 
 palabra_secreta = seleccionar_palabra(dificultad)
 
+
+def dibujar_ahorcado(intentos_fallidos):
+    print()
+    if intentos_fallidos == 0:
+        print("   -----")
+        print("   |   |")
+        print("       |")
+        print("       |")
+        print("       |")
+        print("       |")
+        print(" ----------")
+    elif intentos_fallidos == 1:
+        print("   -----")
+        print("   |   |")
+        print("   O   |")
+        print("       |")
+        print("       |")
+        print("       |")
+        print(" ----------")
+    elif intentos_fallidos == 2:
+        print("   -----")
+        print("   |   |")
+        print("   O   |")
+        print("   |   |")
+        print("       |")
+        print("       |")
+        print(" ----------")
+    elif intentos_fallidos == 3:
+        print("   -----")
+        print("   |   |")
+        print("   O   |")
+        print("  /|   |")
+        print("       |")
+        print("       |")
+        print(" ----------")
+    elif intentos_fallidos == 4:
+        print("   -----")
+        print("   |   |")
+        print("   O   |")
+        print("  /|\  |")
+        print("       |")
+        print("       |")
+        print(" ----------")
+    elif intentos_fallidos == 5:
+        print("   -----")
+        print("   |   |")
+        print("   O   |")
+        print("  /|\  |")
+        print("  /    |")
+        print("       |")
+        print(" ----------")
+    elif intentos_fallidos == 6:
+        print("   -----")
+        print("   |   |")
+        print("   O   |")
+        print("  /|\  |")
+        print("  / \  |")
+        print("       |")
+        print(" ----------")
+
 # Inicializar variables del juego
 intentos = 6  # Máximo de intentos permitidos
+intentos_fallidos = 0  # Contador de intentos fallidos
 progreso = []  # Lista para guardar letras adivinadas o "_"
 letras_adivinadas = []  # Lista para evitar repetir letras
 
@@ -53,7 +114,7 @@ print("Palabra: ", " ".join(progreso))
 # Ciclo principal del juego 
 # Se repite mientras haya intentos y la palabra no esté completa
 while intentos > 0 and "_" in progreso:
-    
+    dibujar_ahorcado(intentos_fallidos)
     # Pedir una letra al usuario
     letra = input("Adivina una letra: ").lower()
 
@@ -83,7 +144,8 @@ while intentos > 0 and "_" in progreso:
     if letra_encontrada:
         print("Letra correcta!")
     else:
-        intentos = intentos - 1  # Restar un intento
+        intentos = intentos - 1
+        intentos_fallidos = intentos_fallidos + 1  # Restar un intento
         print("La letra es incorrecta. Intentos restantes:", intentos)
 
     # Mostrar progreso actual

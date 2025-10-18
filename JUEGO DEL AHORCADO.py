@@ -11,10 +11,29 @@ PALABRAS_DIFICILES = ["interfaz", "algoritmo", "contraseña", "firewall", "malwa
 VOCALES = "aeiou"
 CONSONANTES = "bcdfghjklmnpqrstvwxyz"
 
-# Elegir una palabra al azar de la lista
-# Usamos len(palabras) para obtener tamaño de la lista
-indice_azar = random.randint(0, len(palabras) - 1)
-palabra_secreta = palabras[indice_azar]
+# FUNCIONES
+def seleccionar_palabra(dificultad):
+    if dificultad == "1":
+        return random.choice(PALABRAS_FACILES)
+    elif dificultad == "2":
+        return random.choice(PALABRAS_MEDIAS)
+    elif dificultad == "3":
+        return random.choice(PALABRAS_DIFICILES)
+dificultad_valida = False
+dificultad = ""
+while dificultad_valida == False:
+    print()
+    print("Elige una dificultad:")
+    print("1. Fácil")
+    print("2. Medio")
+    print("3. Difícil")
+    dificultad = input("> ")
+    if dificultad == "1" or dificultad == "2" or dificultad == "3":
+        dificultad_valida = True
+    else:
+        print("¡Opción no válida! Por favor, elige 1, 2 o 3.")
+
+palabra_secreta = seleccionar_palabra(dificultad)
 
 # Inicializar variables del juego
 intentos = 6  # Máximo de intentos permitidos

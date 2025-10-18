@@ -3,8 +3,13 @@
 # Importar librería para elegir palabra al azar 
 import random
 
-# Crear una lista de palabras relacionadas con tecnología
-palabras = ["url", "interfaz", "algoritmo", "contraseña", "nube"]
+# --- ZONA DE CONFIGURACIÓN Y PALABRAS ---
+PALABRAS_FACILES = ["url", "ram", "cpu", "red", "api", "bug"]
+PALABRAS_MEDIAS = ["nube", "html", "proxy", "pixel", "virus"]
+PALABRAS_DIFICILES = ["interfaz", "algoritmo", "contraseña", "firewall", "malware"]
+
+VOCALES = "aeiou"
+CONSONANTES = "bcdfghjklmnpqrstvwxyz"
 
 # Elegir una palabra al azar de la lista
 # Usamos len(palabras) para obtener tamaño de la lista

@@ -11,6 +11,7 @@ PALABRAS_DIFICILES = ["interfaz", "algoritmo", "contraseña", "firewall", "malwa
 VOCALES = "aeiou"
 CONSONANTES = "bcdfghjklmnpqrstvwxyz"
 
+print("¡Bienvenido al juego del Ahorcado!")
 # FUNCIONES
 def seleccionar_palabra(dificultad):
     if dificultad == "1":
@@ -23,7 +24,7 @@ dificultad_valida = False
 dificultad = ""
 while dificultad_valida == False:
     print()
-    print("Elige una dificultad:")
+    print("Por favor, elige una dificultad:")
     print("1. Fácil")
     print("2. Medio")
     print("3. Difícil")
@@ -106,7 +107,8 @@ intentos = 6  # Máximo de intentos permitidos
 intentos_fallidos = 0  # Contador de intentos fallidos
 progreso = []  # Lista para guardar letras adivinadas o "_"
 letras_adivinadas = []
-letras_incorrectas = [] 
+letras_incorrectas = []
+pistas_usadas = 0 
 
 # Llenar progreso con "_" por cada letra de la palabra 
 # Usamos un ciclo for para recorrer cada letra de la palabra
@@ -122,8 +124,45 @@ print("Palabra: ", " ".join(progreso))
 # Se repite mientras haya intentos y la palabra no esté completa
 while intentos > 0 and "_" in progreso:
     dibujar_ahorcado(intentos_fallidos)
-    mostrar_estado_juego(progreso, letras_incorrectas, intentos) # Mostrar estado actual
+    mostrar_estado_juego(progreso, letras_incorrectas, intentos)
+    # Preguntar por pista
+    if pistas_usadas == 0:
+        print()
+        quiere_pista = input("¿Quieres usar una pista? (si/no): ").lower()
+        if quiere_pista == 'si':
+            if intentos > 1:
+                tipo_pista = ""
+                while tipo_pista != 'v' and tipo_pista != 'c':
+                    tipo_pista = input("¿Pista de vocal (v) o consonante (c)?: ").lower()
+                
+                pista_encontrada = False
+                letra_revelada = False # Bandera para revelar solo una letra
+                for i, letra_pista in enumerate(palabra_secreta):
+                    if progreso[i] == "_" and not letra_revelada:
+                        if tipo_pista == 'v' and letra_pista in VOCALES:
+                            progreso[i] = letra_pista
+                            pista_encontrada = True
+                            letra_revelada = True
+                        elif tipo_pista == 'c' and letra_pista in CONSONANTES:
+                            progreso[i] = letra_pista
+                            pista_encontrada = True
+                            letra_revelada = True
+                
+                if pista_encontrada:
+                    print("Pista revelada, pero te cuesta un intento.")
+                    intentos -= 1
+                    intentos_fallidos += 1
+                    pistas_usadas += 1
+                    continue
+                else:
+                    print("No quedan letras de ese tipo por revelar.")
+            else:
+                print("No tienes suficientes intentos para usar una pista.")
+
+    # Pedir al jugador que ingrese una letra
     letra = input("Adivina una letra: ").lower()
+
+
 
     # Validar que sea una sola letra 
     if len(letra) != 1 or not letra.isalpha():

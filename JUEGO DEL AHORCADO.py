@@ -95,11 +95,18 @@ def dibujar_ahorcado(intentos_fallidos):
         print("       |")
         print(" ----------")
 
+def mostrar_estado_juego(progreso, letras_incorrectas, intentos_restantes):
+    print()
+    print("Palabra: ", " ".join(progreso))
+    print("Letras incorrectas: " + ' '.join(letras_incorrectas))
+    print("Intentos restantes:", intentos_restantes)
+
 # Inicializar variables del juego
 intentos = 6  # Máximo de intentos permitidos
 intentos_fallidos = 0  # Contador de intentos fallidos
 progreso = []  # Lista para guardar letras adivinadas o "_"
-letras_adivinadas = []  # Lista para evitar repetir letras
+letras_adivinadas = []
+letras_incorrectas = [] 
 
 # Llenar progreso con "_" por cada letra de la palabra 
 # Usamos un ciclo for para recorrer cada letra de la palabra
@@ -115,7 +122,7 @@ print("Palabra: ", " ".join(progreso))
 # Se repite mientras haya intentos y la palabra no esté completa
 while intentos > 0 and "_" in progreso:
     dibujar_ahorcado(intentos_fallidos)
-    # Pedir una letra al usuario
+    mostrar_estado_juego(progreso, letras_incorrectas, intentos) # Mostrar estado actual
     letra = input("Adivina una letra: ").lower()
 
     # Validar que sea una sola letra 
@@ -145,11 +152,11 @@ while intentos > 0 and "_" in progreso:
         print("Letra correcta!")
     else:
         intentos = intentos - 1
-        intentos_fallidos = intentos_fallidos + 1  # Restar un intento
+        intentos_fallidos = intentos_fallidos + 1
+        letras_incorrectas.append(letra)
         print("La letra es incorrecta. Intentos restantes:", intentos)
 
-    # Mostrar progreso actual
-    print("Palabra: ", " ".join(progreso))
+
 
 # Fin del juego
 # Verificar si ganó o perdió

@@ -194,7 +194,7 @@ while intentos > 0 and "_" in progreso:
                         print("¡Has completado la palabra con ayuda de una pista!")
                         break
                 else:
-                    print("No quedan letras de ese tipo por revelar.")
+                    print("No quedan vocales por revelar.")
             else:
                 print("No tienes suficientes intentos para usar una pista.")
 

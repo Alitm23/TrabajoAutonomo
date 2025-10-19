@@ -122,62 +122,69 @@ print("Adivina una palabra relacionada con el mundo de la tecnología.")
 
 
 # CICLO PRINCIPAL DEL JUEGO  
-# Se repite mientras haya intentos y la palabra no esté completa
 while intentos > 0 and "_" in progreso:
     dibujar_ahorcado(intentos_fallidos)
     letra = mostrar_estado_juego(progreso)
 
-    # Validar entrada del jugador
+    # Validar letra ingresada
     if len(letra) != 1 or not letra.isalpha():
         print("Ingresa solo una letra válida.")
-        print("- Letras incorrectas:", ", ".join(letras_incorrectas))
-        print("- Intentos restantes:", intentos)
+        print("Letras incorrectas:", ", ".join(letras_incorrectas))
+        print("Intentos restantes:", intentos)
+        continue
 
+    # Evitar letras repetidas
     if letra in letras_adivinadas:
-        print("Ya adivinaste esa letra antes.")
-        print("- Letras incorrectas:", ", ".join(letras_incorrectas))
-        print("- Intentos restantes:", intentos)
+        print("Ya ingresaste esa letra antes.")
+        print("Letras incorrectas:", ", ".join(letras_incorrectas))
+        print("Intentos restantes:", intentos)
+        continue
 
     letras_adivinadas.append(letra)
 
-    # Verificar si la letra está en la palabra secreta
+    # Evaluar letra ingresada
     if letra in palabra_secreta:
-            for i, letra_secreta in enumerate(palabra_secreta):
-                if letra_secreta == letra:  # Operador relacional
-                    progreso[i] = letra  # Reemplazar "_" por la letra
-            print("- Letra correcta!")
+        for i, letra_secreta in enumerate(palabra_secreta):
+            if letra_secreta == letra:
+                progreso[i] = letra
+        print("- Letra correcta!")
     else:
+        letras_incorrectas.append(letra)
         intentos -= 1
         intentos_fallidos += 1
-        letras_incorrectas.append(letra)
         print("- Letra incorrecta")
-    # Mostrar el estado después del resultado
-    print("- Letras incorrectas:", ", ".join(letras_incorrectas))
-    print("- Intentos restantes:", intentos)
-    print("-" * 35)
 
+    # Mostrar estado actual del juego
+    print(f"- Letras incorrectas: {', '.join(letras_incorrectas)}") # Mostrar letras incorrectas
+    print(f"- Intentos restantes: {intentos}") # Mostrar intentos restantes
+    print("-----------------------------------")
+    if "_" not in progreso:
+        break
 
-
-# Preguntar por pista solo si se ha fallado 3 veces o más
-    if intentos_fallidos >= 3 and pistas_usadas == 0:
-        print()
+    # Mostrar opción de pista solo si:
+    # 1) tiene al menos 3 fallos
+    # 2) no ha usado la pista antes
+    # 3) aún faltan al menos 2 letras por descubrir
+    if intentos_fallidos >= 3 and pistas_usadas == 0 and "_" in progreso:
         quiere_pista = input("¿Quieres usar una pista? (si/no): ").lower()
         if quiere_pista == 'si':
             if intentos > 1:
                 tipo_pista = ""
-                while tipo_pista != 'v' and tipo_pista != 'c':
+                while tipo_pista not in ['v', 'c']:
                     tipo_pista = input("¿Pista de vocal (v) o consonante (c)?: ").lower()
-                
+                # Buscar y revelar una letra de la pista seleccionada
                 pista_encontrada = False
                 for i, letra_pista in enumerate(palabra_secreta):
                     if progreso[i] == "_":
                         if tipo_pista == 'v' and letra_pista in VOCALES:
                             progreso[i] = letra_pista
                             pista_encontrada = True
+                            break
                         elif tipo_pista == 'c' and letra_pista in CONSONANTES:
                             progreso[i] = letra_pista
                             pista_encontrada = True
-                
+                            break
+                # Si se encontró una pista, se revela y se descuentan intentos
                 if pista_encontrada:
                     print("Pista revelada, pero te cuesta un intento.")
                     intentos -= 1
@@ -185,15 +192,15 @@ while intentos > 0 and "_" in progreso:
                     pistas_usadas += 1
                     if "_" not in progreso:
                         print("¡Has completado la palabra con ayuda de una pista!")
+                        break
                 else:
-                    print("No quedan letras de ese tipo por revelar.")
+                    print("No quedan vocales por revelar.")
             else:
                 print("No tienes suficientes intentos para usar una pista.")
 
 
 # Fin del juego
-# Verificar si ganó o perdió
-if "_" not in progreso:  # Operador relacional !=
+if "_" not in progreso: 
     print("Ganaste!! La palabra es:", palabra_secreta)
 else:
     print("Perdiste :( La palabra era:", palabra_secreta)

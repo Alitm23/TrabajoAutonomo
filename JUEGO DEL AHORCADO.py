@@ -200,6 +200,7 @@ while intentos > 0 and "_" in progreso:
 
 
 # Fin del juego
+dibujar_ahorcado(intentos_fallidos)
 if "_" not in progreso: 
     print("Ganaste!! La palabra es:", palabra_secreta)
 else:

@@ -20,6 +20,8 @@ def seleccionar_palabra(dificultad):
         return random.choice(PALABRAS_MEDIAS)
     elif dificultad == "3":
         return random.choice(PALABRAS_DIFICILES)
+    
+
 dificultad_valida = False
 dificultad = ""
 while dificultad_valida == False:
@@ -38,63 +40,74 @@ palabra_secreta = seleccionar_palabra(dificultad)
 
 #FUNCION DIBUJAR AHORCADO
 def dibujar_ahorcado(intentos_fallidos):
-    print()
-    if intentos_fallidos == 0:
-        print("   -----")
-        print("   |   |")
-        print("       |")
-        print("       |")
-        print("       |")
-        print("       |")
-        print(" ----------")
-    elif intentos_fallidos == 1:
-        print("   -----")
-        print("   |   |")
-        print("   O   |")
-        print("       |")
-        print("       |")
-        print("       |")
-        print(" ----------")
-    elif intentos_fallidos == 2:
-        print("   -----")
-        print("   |   |")
-        print("   O   |")
-        print("   |   |")
-        print("       |")
-        print("       |")
-        print(" ----------")
-    elif intentos_fallidos == 3:
-        print("   -----")
-        print("   |   |")
-        print("   O   |")
-        print("  /|   |")
-        print("       |")
-        print("       |")
-        print(" ----------")
-    elif intentos_fallidos == 4:
-        print("   -----")
-        print("   |   |")
-        print("   O   |")
-        print("  /|\  |")
-        print("       |")
-        print("       |")
-        print(" ----------")
-    elif intentos_fallidos == 5:
-        print("   -----")
-        print("   |   |")
-        print("   O   |")
-        print("  /|\  |")
-        print("  /    |")
-        print("       |")
-        print(" ----------")
-    elif intentos_fallidos == 6:
-        print("   -----")
-        print("   |   |")
-        print("   O   |")
-        print("  /|\  |")
-        print("  / \  |")
-        print("       |")
-        print(" ----------")
+    """Retorna el dibujo del ahorcado según los intentos fallidos."""
+    etapas = [
+        """
+           -----
+           |   |
+               |
+               |
+               |
+               |
+         ----------
+        """,
+        """
+           -----
+           |   |
+           O   |
+               |
+               |
+               |
+         ----------
+        """,
+        """
+           -----
+           |   |
+           O   |
+           |   |
+               |
+               |
+         ----------
+        """,
+        """
+           -----
+           |   |
+           O   |
+          /|   |
+               |
+               |
+         ----------
+        """,
+        """
+           -----
+           |   |
+           O   |
+          /|\\  |
+               |
+               |
+         ----------
+        """,
+        """
+           -----
+           |   |
+           O   |
+          /|\\  |
+          /    |
+               |
+         ----------
+        """,
+        """
+           -----
+           |   |
+           O   |
+          /|\\  |
+          / \\  |
+               |
+         ----------
+        """
+    ]
+    return etapas[intentos_fallidos]
+
 
 
 # FUNCION MOSTRAR ESTADO DEL JUEGO
@@ -123,7 +136,7 @@ print("Adivina una palabra relacionada con el mundo de la tecnología.")
 
 # CICLO PRINCIPAL DEL JUEGO  
 while intentos > 0 and "_" in progreso:
-    dibujar_ahorcado(intentos_fallidos)
+    print(dibujar_ahorcado(intentos_fallidos))
     letra = mostrar_estado_juego(progreso)
 
     # Validar letra ingresada
@@ -200,7 +213,7 @@ while intentos > 0 and "_" in progreso:
 
 
 # Fin del juego
-dibujar_ahorcado(intentos_fallidos)
+print(dibujar_ahorcado(intentos_fallidos))
 if "_" not in progreso: 
     print("Ganaste!! La palabra es:", palabra_secreta)
 else:

@@ -7,12 +7,12 @@ import random
 PALABRAS_FACILES = ["url", "ram", "cpu", "red", "api", "bug"]
 PALABRAS_MEDIAS = ["nube", "html", "proxy", "pixel", "virus"]
 PALABRAS_DIFICILES = ["interfaz", "algoritmo", "contraseña", "firewall", "malware"]
-
 VOCALES = "aeiou"
 CONSONANTES = "bcdfghjklmnpqrstvwxyz"
+print("=== BIENVENIDO AL JUEGO DEL AHORCADO ===")
 
-print("¡Bienvenido al juego del Ahorcado!")
-# FUNCIONES
+
+# FUNCION SELECCIONAR PALABRA SEGUN DIFICULTAD
 def seleccionar_palabra(dificultad):
     if dificultad == "1":
         return random.choice(PALABRAS_FACILES)
@@ -28,15 +28,15 @@ while dificultad_valida == False:
     print("1. Fácil")
     print("2. Medio")
     print("3. Difícil")
-    dificultad = input("> ")
-    if dificultad == "1" or dificultad == "2" or dificultad == "3":
+    dificultad = input(">> ")
+    if dificultad in ["1", "2", "3"]:
         dificultad_valida = True
     else:
         print("¡Opción no válida! Por favor, elige 1, 2 o 3.")
 
 palabra_secreta = seleccionar_palabra(dificultad)
 
-
+#FUNCION DIBUJAR AHORCADO
 def dibujar_ahorcado(intentos_fallidos):
     print()
     if intentos_fallidos == 0:
@@ -96,11 +96,13 @@ def dibujar_ahorcado(intentos_fallidos):
         print("       |")
         print(" ----------")
 
-def mostrar_estado_juego(progreso, letras_incorrectas, intentos_restantes):
+
+# FUNCION MOSTRAR ESTADO DEL JUEGO
+def mostrar_estado_juego(progreso):
     print()
     print("Palabra: ", " ".join(progreso))
-    print("Letras incorrectas: " + ' '.join(letras_incorrectas))
-    print("Intentos restantes:", intentos_restantes)
+    return input("Adivina una letra: ").lower() # Pedir al jugador que ingrese una letra
+    
 
 # Inicializar variables del juego
 intentos = 6  # Máximo de intentos permitidos
@@ -109,24 +111,55 @@ progreso = []  # Lista para guardar letras adivinadas o "_"
 letras_adivinadas = []
 letras_incorrectas = []
 pistas_usadas = 0 
+letra = ""
 
 # Llenar progreso con "_" por cada letra de la palabra 
 # Usamos un ciclo for para recorrer cada letra de la palabra
 for i in range(len(palabra_secreta)):
     progreso.append("_")
 
-# Mostrar mensaje de bienvenida 
-print("=== BIENVENIDO AL JUEGO DEL AHORCADO ===")
-print("Adivina una palabra relacionada con la tecnología.")
-print("Palabra: ", " ".join(progreso))
+print("Adivina una palabra relacionada con el mundo de la tecnología.")
 
-# Ciclo principal del juego 
+
+# CICLO PRINCIPAL DEL JUEGO  
 # Se repite mientras haya intentos y la palabra no esté completa
 while intentos > 0 and "_" in progreso:
     dibujar_ahorcado(intentos_fallidos)
-    mostrar_estado_juego(progreso, letras_incorrectas, intentos)
-    # Preguntar por pista
-    if pistas_usadas == 0:
+    letra = mostrar_estado_juego(progreso)
+
+    # Validar entrada del jugador
+    if len(letra) != 1 or not letra.isalpha():
+        print("Ingresa solo una letra válida.")
+        print("- Letras incorrectas:", ", ".join(letras_incorrectas))
+        print("- Intentos restantes:", intentos)
+
+    if letra in letras_adivinadas:
+        print("Ya adivinaste esa letra antes.")
+        print("- Letras incorrectas:", ", ".join(letras_incorrectas))
+        print("- Intentos restantes:", intentos)
+
+    letras_adivinadas.append(letra)
+
+    # Verificar si la letra está en la palabra secreta
+    if letra in palabra_secreta:
+            for i, letra_secreta in enumerate(palabra_secreta):
+                if letra_secreta == letra:  # Operador relacional
+                    progreso[i] = letra  # Reemplazar "_" por la letra
+            print("- Letra correcta!")
+    else:
+        intentos -= 1
+        intentos_fallidos += 1
+        letras_incorrectas.append(letra)
+        print("- Letra incorrecta")
+    # Mostrar el estado después del resultado
+    print("- Letras incorrectas:", ", ".join(letras_incorrectas))
+    print("- Intentos restantes:", intentos)
+    print("-" * 35)
+
+
+
+# Preguntar por pista solo si se ha fallado 3 veces o más
+    if intentos_fallidos >= 3 and pistas_usadas == 0:
         print()
         quiere_pista = input("¿Quieres usar una pista? (si/no): ").lower()
         if quiere_pista == 'si':
@@ -136,65 +169,26 @@ while intentos > 0 and "_" in progreso:
                     tipo_pista = input("¿Pista de vocal (v) o consonante (c)?: ").lower()
                 
                 pista_encontrada = False
-                letra_revelada = False # Bandera para revelar solo una letra
                 for i, letra_pista in enumerate(palabra_secreta):
-                    if progreso[i] == "_" and not letra_revelada:
+                    if progreso[i] == "_":
                         if tipo_pista == 'v' and letra_pista in VOCALES:
                             progreso[i] = letra_pista
                             pista_encontrada = True
-                            letra_revelada = True
                         elif tipo_pista == 'c' and letra_pista in CONSONANTES:
                             progreso[i] = letra_pista
                             pista_encontrada = True
-                            letra_revelada = True
                 
                 if pista_encontrada:
                     print("Pista revelada, pero te cuesta un intento.")
                     intentos -= 1
                     intentos_fallidos += 1
                     pistas_usadas += 1
-                    continue
+                    if "_" not in progreso:
+                        print("¡Has completado la palabra con ayuda de una pista!")
                 else:
                     print("No quedan letras de ese tipo por revelar.")
             else:
                 print("No tienes suficientes intentos para usar una pista.")
-
-    # Pedir al jugador que ingrese una letra
-    letra = input("Adivina una letra: ").lower()
-
-
-
-    # Validar que sea una sola letra 
-    if len(letra) != 1 or not letra.isalpha():
-        print("Ingresa solo una letra válida.")
-        continue  # Volver al inicio del ciclo
-
-    # Verificar si ya se adivinó esa letra 
-    if letra in letras_adivinadas:
-        print("Ya adivinaste esa letra antes.")
-        continue  # Volver al inicio del ciclo
-
-    # Agregar letra a la lista de letras ya usadas
-    letras_adivinadas.append(letra)
-
-    # Verificar si la letra está en la palabra secreta
-    letra_encontrada = False  # Bandera para saber si acertó
-
-    # Usar un ciclo for para recorrer cada letra de la palabra
-    for i in range(len(palabra_secreta)):
-        if palabra_secreta[i] == letra:  # Operador relacional 
-            progreso[i] = letra  # Reemplazar "_" por la letra
-            letra_encontrada = True  # Marcar que encontró al menos una
-
-    # Mostrar resultado de la adivinanza 
-    if letra_encontrada:
-        print("Letra correcta!")
-    else:
-        intentos = intentos - 1
-        intentos_fallidos = intentos_fallidos + 1
-        letras_incorrectas.append(letra)
-        print("La letra es incorrecta. Intentos restantes:", intentos)
-
 
 
 # Fin del juego
